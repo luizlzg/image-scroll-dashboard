@@ -3,12 +3,17 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '@/components/Sidebar';
 import Dashboard from './Dashboard';
+import { useMediaQuery } from '@/hooks/use-mobile';
 
 const Index = () => {
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  
   return (
     <div className="min-h-screen bg-gray-50">
       <Sidebar />
-      <Dashboard />
+      <div className={`${isMobile ? 'pl-0 pt-16' : 'pl-64'} min-h-screen bg-gray-50 transition-all duration-200`}>
+        <Dashboard />
+      </div>
     </div>
   );
 };

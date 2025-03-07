@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Header from '@/components/Header';
 import KPICard from '@/components/KPICard';
@@ -8,8 +7,11 @@ import BarChart from '@/components/BarChart';
 import PieChart from '@/components/PieChart';
 import StatsList from '@/components/StatsList';
 import { Activity, Clock, PhoneCall, XCircle } from 'lucide-react';
+import { useMediaQuery } from '@/hooks/use-mobile';
 
 const Dashboard = () => {
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  
   // Time line chart data
   const timeData = [
     { time: '00:00', value: 20 },
@@ -91,113 +93,111 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="pl-64 min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <Header title="Dashboard" subtitle="Monitoramento em tempo real" />
+    <div className={`${isMobile ? 'px-4' : 'max-w-7xl mx-auto px-4 sm:px-6 md:px-8'}`}>
+      <Header title="Dashboard" subtitle="Monitoramento em tempo real" />
+      
+      {/* Indicadores operacionais section */}
+      <div className="mt-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold text-gray-900">Indicadores operacionais</h2>
+        </div>
         
-        {/* Indicadores operacionais section */}
-        <div className="mt-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-gray-900">Indicadores operacionais</h2>
-          </div>
-          
-          {/* Main KPI Card */}
-          <KPICard 
-            title="Chamadas resolvidas pela IA"
-            value="1.754"
-            percentage="68%"
-            meta="Meta: 70% | Crescimento: +2.3% vs mês anterior"
-            color="green"
-            icon={<Activity className="h-5 w-5" />}
-            className="mb-6"
+        {/* Main KPI Card */}
+        <KPICard 
+          title="Chamadas resolvidas pela IA"
+          value="1.754"
+          percentage="68%"
+          meta="Meta: 70% | Crescimento: +2.3% vs mês anterior"
+          color="green"
+          icon={<Activity className="h-5 w-5" />}
+          className="mb-6"
+        />
+        
+        {/* Small metrics row */}
+        <div className={`grid grid-cols-1 ${isMobile ? '' : 'md:grid-cols-3'} gap-6 mb-8`}>
+          <MetricCard 
+            title="Total de chamadas" 
+            value="2.580" 
+            icon={<PhoneCall className="h-5 w-5" />} 
+            color="blue"
+            className="animate-delay-100"
           />
-          
-          {/* Small metrics row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <MetricCard 
-              title="Total de chamadas" 
-              value="2.580" 
-              icon={<PhoneCall className="h-5 w-5" />} 
-              color="blue"
-              className="animate-delay-100"
-            />
-            <MetricCard 
-              title="TMA da IA" 
-              value="2:22 min" 
-              icon={<Clock className="h-5 w-5" />} 
-              color="yellow"
-              className="animate-delay-200"
-            />
-            <MetricCard 
-              title="Taxa de abandono" 
-              value="8%" 
-              icon={<XCircle className="h-5 w-5" />} 
-              color="red"
-              className="animate-delay-300"
-            />
-          </div>
-          
-          {/* Charts */}
-          <div className="space-y-6">
-            <LineChart 
-              data={timeData} 
-              title="Tempo médio de atendimento - IA" 
+          <MetricCard 
+            title="TMA da IA" 
+            value="2:22 min" 
+            icon={<Clock className="h-5 w-5" />} 
+            color="yellow"
+            className="animate-delay-200"
+          />
+          <MetricCard 
+            title="Taxa de abandono" 
+            value="8%" 
+            icon={<XCircle className="h-5 w-5" />} 
+            color="red"
+            className="animate-delay-300"
+          />
+        </div>
+        
+        {/* Charts */}
+        <div className="space-y-6">
+          <LineChart 
+            data={timeData} 
+            title="Tempo médio de atendimento - IA" 
+            className="animate-delay-100"
+          />
+          <BarChart 
+            data={volumeData} 
+            title="Volume de chamadas por hora" 
+            className="animate-delay-200"
+          />
+        </div>
+        
+        {/* Second section - Results */}
+        <div className="mt-10 mb-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Resultados das chamadas</h2>
+          <div className={`grid grid-cols-1 ${isMobile ? '' : 'md:grid-cols-2'} gap-6 mb-6`}>
+            <PieChart 
+              data={resultsData} 
+              title="Resultados das chamadas" 
               className="animate-delay-100"
             />
             <BarChart 
-              data={volumeData} 
-              title="Volume de chamadas por hora" 
+              data={topicsData} 
+              title="Chamada por assunto" 
+              color="#50E3C2" 
               className="animate-delay-200"
             />
           </div>
           
-          {/* Second section - Results */}
-          <div className="mt-10 mb-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Resultados das chamadas</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <PieChart 
-                data={resultsData} 
-                title="Resultados das chamadas" 
-                className="animate-delay-100"
-              />
-              <BarChart 
-                data={topicsData} 
-                title="Chamada por assunto" 
-                color="#50E3C2" 
-                className="animate-delay-200"
-              />
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <PieChart 
-                data={transferReasonsData} 
-                title="Taxa de transferência para atendimento humano" 
-                className="col-span-1 md:col-span-1 animate-delay-300"
-              />
-              <BarChart 
-                data={transferMotivationData} 
-                title="Motivo da transferência" 
-                color="#6C5CE7" 
-                className="col-span-1 md:col-span-1 animate-delay-400"
-              />
-              <StatsList 
-                title="Skill de transferência" 
-                items={skillTransferData} 
-                className="col-span-1 md:col-span-1 animate-delay-500"
-              />
-            </div>
+          <div className={`grid grid-cols-1 ${isMobile ? '' : 'md:grid-cols-3'} gap-6`}>
+            <PieChart 
+              data={transferReasonsData} 
+              title="Taxa de transferência para atendimento humano" 
+              className={`${isMobile ? 'col-span-1' : 'col-span-1 md:col-span-1'} animate-delay-300`}
+            />
+            <BarChart 
+              data={transferMotivationData} 
+              title="Motivo da transferência" 
+              color="#6C5CE7" 
+              className={`${isMobile ? 'col-span-1' : 'col-span-1 md:col-span-1'} animate-delay-400`}
+            />
+            <StatsList 
+              title="Skill de transferência" 
+              items={skillTransferData} 
+              className={`${isMobile ? 'col-span-1' : 'col-span-1 md:col-span-1'} animate-delay-500`}
+            />
           </div>
-          
-          {/* Third section - Efficiency and Processes */}
-          <div className="mt-10 mb-10">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Eficiência e processos</h2>
-            <div className="grid grid-cols-1 gap-6">
-              <PieChart 
-                data={callInterruptionData} 
-                title="Momentos de interrupção da chamada" 
-                className="animate-delay-100"
-              />
-            </div>
+        </div>
+        
+        {/* Third section - Efficiency and Processes */}
+        <div className="mt-10 mb-10">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Eficiência e processos</h2>
+          <div className="grid grid-cols-1 gap-6">
+            <PieChart 
+              data={callInterruptionData} 
+              title="Momentos de interrupção da chamada" 
+              className="animate-delay-100"
+            />
           </div>
         </div>
       </div>

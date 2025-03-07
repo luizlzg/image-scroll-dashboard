@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { PieChart as RechartsPieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { useMediaQuery } from '@/hooks/use-mobile';
 
 interface DataPoint {
   name: string;
@@ -30,13 +31,16 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 
 const CustomLegend = ({ payload }: any) => {
   if (!payload) return null;
+  const isMobile = useMediaQuery('(max-width: 768px)');
   
   return (
-    <ul className="flex flex-col space-y-2 mt-4">
+    <ul className={`flex flex-col space-y-2 ${isMobile ? 'mt-4' : 'mt-0'}`}>
       {payload.map((entry: any, index: number) => (
         <li key={`item-${index}`} className="flex items-center">
           <span className="w-3 h-3 rounded-full inline-block mr-2" style={{ backgroundColor: entry.color }}></span>
-          <span className="text-xs text-gray-600">{entry.value} ({entry.payload.percentage})</span>
+          <span className="text-xs text-gray-600 truncate max-w-[120px]" title={`${entry.value} (${entry.payload.percentage})`}>
+            {entry.value} ({entry.payload.percentage})
+          </span>
         </li>
       ))}
     </ul>
@@ -56,30 +60,40 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 const PieChart: React.FC<PieChartProps> = ({ data, title, className }) => {
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  
   return (
     <div className={`dashboard-card opacity-0 animate-scale-in ${className}`}>
       <h3 className="text-lg font-medium text-gray-800 mb-4">{title}</h3>
-      <div className="h-64 flex items-center justify-center">
-        <ResponsiveContainer width="100%" height="100%">
-          <RechartsPieChart>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              labelLine={false}
-              innerRadius={60}
-              outerRadius={90}
-              paddingAngle={1}
-              dataKey="value"
-            >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
-              ))}
-            </Pie>
-            <Tooltip content={<CustomTooltip />} />
-            <Legend content={<CustomLegend />} layout="vertical" verticalAlign="middle" align="right" />
-          </RechartsPieChart>
-        </ResponsiveContainer>
+      <div className={`${isMobile ? 'flex flex-col' : 'flex items-center justify-center'} h-64`}>
+        <div className={`${isMobile ? 'h-48 w-full' : 'h-64 w-3/4'}`}>
+          <ResponsiveContainer width="100%" height="100%">
+            <RechartsPieChart>
+              <Pie
+                data={data}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                innerRadius={isMobile ? 40 : 60}
+                outerRadius={isMobile ? 70 : 90}
+                paddingAngle={1}
+                dataKey="value"
+              >
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip content={<CustomTooltip />} />
+              <Legend 
+                content={<CustomLegend />} 
+                layout={isMobile ? "horizontal" : "vertical"} 
+                verticalAlign={isMobile ? "bottom" : "middle"} 
+                align={isMobile ? "center" : "right"} 
+                wrapperStyle={isMobile ? { position: 'relative', marginTop: '10px' } : { position: 'absolute', right: 0 }}
+              />
+            </RechartsPieChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
