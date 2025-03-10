@@ -26,88 +26,82 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-const CustomLegend = () => {
+const CustomLegend = ({ payload }: any) => {
+  if (!payload) return null;
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  
   return (
-    <div className="custom-legend">
-      {/* Custom legend content */}
+    <div className="w-full overflow-x-auto">
+      <ul className={`flex flex-wrap justify-center gap-2 min-w-min`}>
+        {payload.map((entry: any, index: number) => (
+          <li key={`item-${index}`} className="flex items-center min-w-0 mx-1">
+            <span className="w-3 h-3 rounded-full flex-shrink-0 mr-1" style={{ backgroundColor: entry.color }}></span>
+            <span className="text-xs text-gray-600 truncate" title={entry.value}>
+              {entry.value}
+            </span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-const BarChart: React.FC<BarChartProps> = ({ 
-  data, 
-  title, 
-  color = "#33C3F0",
-  className 
-}) => {
+const BarChart: React.FC<BarChartProps> = ({ data, title, color = "#3B82F6", className }) => {
   const isMobile = useMediaQuery('(max-width: 768px)');
   
-  // Truncate long names for better display on mobile
-  const processedData = data.map(item => ({
+  // Add display name property for better legend readability
+  const enhancedData = data.map(item => ({
     ...item,
-    displayName: isMobile && item.name.length > 10 ? `${item.name.substring(0, 8)}...` : item.name
+    displayName: item.name.length > 15 ? item.name.substring(0, 12) + '...' : item.name
   }));
   
   return (
-    <div className={`dashboard-card opacity-0 animate-scale-in ${className}`}>
-      <h3 className="text-lg font-medium text-gray-800 mb-6">{title}</h3>
-      <div className={`${isMobile ? 'h-48' : 'h-64'}`}>
-        <ResponsiveContainer width="100%" height="100%">
-          <RechartsBarChart
-            data={processedData}
-            margin={{ 
-              top: 5, 
-              right: isMobile ? 5 : 30, 
-              left: isMobile ? -15 : 20, 
-              bottom: isMobile ? 15 : 5 
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-            <XAxis 
-              dataKey={isMobile ? "displayName" : "name"}
-              axisLine={false}
-              tickLine={false}
-              tick={{ 
-                fontSize: isMobile ? 8 : 12, 
-                fill: '#9CA3AF',
-                width: 70,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
+    <div className={`dashboard-card opacity-0 animate-scale-in ${className} flex flex-col`}>
+      <h3 className="text-lg font-medium text-gray-800 mb-4">{title}</h3>
+      <div className="flex-grow">
+        <div className={`${isMobile ? 'h-52' : 'h-64'} w-full`}>
+          <ResponsiveContainer width="100%" height="100%">
+            <RechartsBarChart
+              data={enhancedData}
+              margin={{
+                top: 5,
+                right: 10,
+                left: isMobile ? -15 : 0,
+                bottom: isMobile ? 40 : 20,
               }}
-              height={isMobile ? 70 : 40}
-              textAnchor={isMobile ? "end" : "middle"}
-              angle={isMobile ? -45 : 0}
-              minTickGap={5}
-            />
-            <YAxis 
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: isMobile ? 10 : 12, fill: '#9CA3AF' }}
-              width={isMobile ? 25 : 40}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend 
-              content={<CustomLegend />} 
-              layout="horizontal"
-              verticalAlign="bottom"
-              align="center"
-              wrapperStyle={{ 
-                position: 'relative', 
-                marginTop: '10px', 
-                paddingTop: '15px',
-                width: '100%',
-                overflowX: 'auto'
-              }}
-            />
-            <Bar 
-              dataKey="value" 
-              fill={color}
-              radius={[4, 4, 0, 0]}
               barSize={isMobile ? 15 : 30}
-              animationDuration={1500}
-            />
-          </RechartsBarChart>
-        </ResponsiveContainer>
+            >
+              <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.3} />
+              <XAxis 
+                dataKey={isMobile ? "displayName" : "name"} 
+                tick={{ fontSize: isMobile ? 9 : 12, fill: '#6B7280' }}
+                tickLine={false}
+                axisLine={{ stroke: '#E5E7EB' }}
+                height={60}
+                angle={isMobile ? -45 : 0}
+                textAnchor={isMobile ? "end" : "middle"}
+                interval={0}
+              />
+              <YAxis 
+                tick={{ fontSize: 10, fill: '#6B7280' }}
+                tickLine={false}
+                axisLine={false}
+                width={25}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend 
+                content={<CustomLegend />}
+                verticalAlign="bottom"
+                wrapperStyle={{ 
+                  position: 'relative',
+                  width: '100%',
+                  paddingTop: '10px'
+                }}
+              />
+              <Bar dataKey="value" fill={color} radius={[4, 4, 0, 0]} />
+            </RechartsBarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );

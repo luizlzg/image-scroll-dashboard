@@ -20,16 +20,18 @@ const CustomLegend = ({ payload }: any) => {
   const isMobile = useMediaQuery('(max-width: 768px)');
   
   return (
-    <ul className={`flex ${isMobile ? 'flex-wrap' : 'flex-col'} gap-2 ${isMobile ? 'justify-center mt-4' : 'mt-0'}`}>
-      {payload.map((entry: any, index: number) => (
-        <li key={`item-${index}`} className="flex items-center">
-          <span className="w-3 h-3 rounded-full inline-block mr-2" style={{ backgroundColor: entry.color }}></span>
-          <span className="text-xs text-gray-600 whitespace-nowrap" title={entry.value}>
-            {entry.value}
-          </span>
-        </li>
-      ))}
-    </ul>
+    <div className="w-full overflow-x-auto pb-2">
+      <ul className={`flex ${isMobile ? 'flex-wrap justify-center' : 'flex-col'} gap-2 min-w-min`}>
+        {payload.map((entry: any, index: number) => (
+          <li key={`item-${index}`} className="flex items-center min-w-0">
+            <span className="w-3 h-3 rounded-full flex-shrink-0 mr-2" style={{ backgroundColor: entry.color }}></span>
+            <span className={`text-xs text-gray-600 ${isMobile ? 'max-w-[100px]' : 'max-w-full'} truncate`} title={entry.value}>
+              {entry.value}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 
@@ -49,12 +51,12 @@ const PieChart: React.FC<PieChartProps> = ({ data, title, className }) => {
   const isMobile = useMediaQuery('(max-width: 768px)');
   
   return (
-    <div className={`dashboard-card opacity-0 animate-scale-in ${className}`}>
+    <div className={`dashboard-card opacity-0 animate-scale-in ${className} flex flex-col`}>
       <h3 className="text-lg font-medium text-gray-800 mb-4">{title}</h3>
-      <div className={`flex flex-col h-auto min-h-[280px]`}>
-        <div className={`${isMobile ? 'h-48' : 'h-64'} w-full`}>
+      <div className={`flex flex-col flex-grow`}>
+        <div className={`${isMobile ? 'h-40' : 'h-52'} w-full`}>
           <ResponsiveContainer width="100%" height="100%">
-            <RechartsPieChart>
+            <RechartsPieChart margin={{ bottom: 5 }}>
               <Pie
                 data={data}
                 cx="50%"
@@ -75,7 +77,12 @@ const PieChart: React.FC<PieChartProps> = ({ data, title, className }) => {
                 layout="horizontal"
                 verticalAlign="bottom"
                 align="center"
-                wrapperStyle={{ position: 'relative', marginTop: '10px', paddingTop: '15px' }}
+                wrapperStyle={{ 
+                  width: '100%',
+                  position: 'relative', 
+                  marginTop: '10px',
+                  bottom: 0
+                }}
               />
             </RechartsPieChart>
           </ResponsiveContainer>
