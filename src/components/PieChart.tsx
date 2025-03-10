@@ -20,12 +20,12 @@ const CustomLegend = ({ payload }: any) => {
   const isMobile = useMediaQuery('(max-width: 768px)');
   
   return (
-    <div className="w-full overflow-x-auto pb-2">
-      <ul className={`flex ${isMobile ? 'flex-wrap justify-center' : 'flex-col'} gap-2 min-w-min`}>
+    <div className="w-full overflow-x-auto pb-1">
+      <ul className={`flex ${isMobile ? 'flex-wrap justify-center' : 'flex-col'} gap-1 min-w-min`}>
         {payload.map((entry: any, index: number) => (
-          <li key={`item-${index}`} className="flex items-center min-w-0">
-            <span className="w-3 h-3 rounded-full flex-shrink-0 mr-2" style={{ backgroundColor: entry.color }}></span>
-            <span className={`text-xs text-gray-600 ${isMobile ? 'max-w-[100px]' : 'max-w-full'} truncate`} title={entry.value}>
+          <li key={`item-${index}`} className="flex items-center min-w-0 whitespace-nowrap">
+            <span className="w-2 h-2 rounded-full flex-shrink-0 mr-1" style={{ backgroundColor: entry.color }}></span>
+            <span className={`text-xs text-gray-600 truncate`} title={entry.value}>
               {entry.value}
             </span>
           </li>
@@ -51,19 +51,20 @@ const PieChart: React.FC<PieChartProps> = ({ data, title, className }) => {
   const isMobile = useMediaQuery('(max-width: 768px)');
   
   return (
-    <div className={`dashboard-card opacity-0 animate-scale-in ${className} flex flex-col`}>
-      <h3 className="text-lg font-medium text-gray-800 mb-4">{title}</h3>
-      <div className={`flex flex-col flex-grow`}>
-        <div className={`${isMobile ? 'h-40' : 'h-52'} w-full`}>
+    <div className={`dashboard-card opacity-0 animate-scale-in ${className} flex flex-col h-full`}>
+      <h3 className="text-lg font-medium text-gray-800 mb-2">{title}</h3>
+      <div className="flex flex-col flex-grow relative">
+        {/* Set a fixed height for the chart that leaves room for legends */}
+        <div className={`${isMobile ? 'h-[60%]' : 'h-[70%]'} w-full`}>
           <ResponsiveContainer width="100%" height="100%">
-            <RechartsPieChart margin={{ bottom: 5 }}>
+            <RechartsPieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
               <Pie
                 data={data}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                innerRadius={isMobile ? 40 : 60}
-                outerRadius={isMobile ? 65 : 85}
+                innerRadius={isMobile ? 35 : 50}
+                outerRadius={isMobile ? 55 : 70}
                 paddingAngle={2}
                 dataKey="value"
               >
@@ -72,20 +73,17 @@ const PieChart: React.FC<PieChartProps> = ({ data, title, className }) => {
                 ))}
               </Pie>
               <Tooltip content={<CustomTooltip />} />
-              <Legend 
-                content={<CustomLegend />} 
-                layout="horizontal"
-                verticalAlign="bottom"
-                align="center"
-                wrapperStyle={{ 
-                  width: '100%',
-                  position: 'relative', 
-                  marginTop: '10px',
-                  bottom: 0
-                }}
-              />
             </RechartsPieChart>
           </ResponsiveContainer>
+        </div>
+        
+        {/* Separate container for legends to ensure they stay within the card */}
+        <div className={`${isMobile ? 'h-[40%]' : 'h-[30%]'} w-full overflow-y-auto`}>
+          <CustomLegend payload={data.map(item => ({ 
+            color: item.color, 
+            value: `${item.name} (${item.percentage})`,
+            dataKey: "value" 
+          }))} />
         </div>
       </div>
     </div>
