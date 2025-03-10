@@ -1,5 +1,5 @@
 
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import Sidebar from '@/components/Sidebar';
 import Dashboard from './Dashboard';
 import { useMediaQuery } from '@/hooks/use-mobile';

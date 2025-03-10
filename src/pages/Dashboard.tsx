@@ -13,7 +13,7 @@ const Dashboard = () => {
   
   return (
     <div className={`${isMobile ? 'px-2' : 'max-w-7xl mx-auto px-4 sm:px-6 md:px-8'}`}>
-      <Header title="Dashboard" subtitle="Monitoramento em tempo real" />
+      <Header title="Visão geral" subtitle="Monitoramento em tempo real" />
       
       {/* Indicadores operacionais section */}
       <div className="mt-4 sm:mt-6">
