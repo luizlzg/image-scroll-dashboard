@@ -1,5 +1,4 @@
 
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '@/components/Sidebar';
 import Dashboard from './Dashboard';
@@ -12,7 +11,9 @@ const Index = () => {
     <div className="min-h-screen bg-gray-50">
       <Sidebar />
       <div className={`${isMobile ? 'pl-0 pt-16' : 'pl-64'} min-h-screen bg-gray-50 transition-all duration-200`}>
-        <Dashboard />
+        <main className="w-full overflow-hidden">
+          <Dashboard />
+        </main>
       </div>
     </div>
   );

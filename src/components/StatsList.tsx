@@ -24,13 +24,13 @@ const StatsList: React.FC<StatsListProps> = ({ title, items, className }) => {
       <div className="space-y-3 mt-2">
         {items.map((item) => (
           <div key={item.id} className="flex items-center justify-between">
-            <div className={`flex ${isMobile ? 'flex-col' : 'items-center space-x-2'}`}>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2">
               <span className="text-sm font-medium text-gray-700">{item.id}</span>
-              <span className={`text-sm text-gray-500 ${isMobile ? 'ml-0' : 'ml-2'}`}>
+              <span className="text-sm text-gray-500 sm:ml-2">
                 {isMobile ? item.name : `- ${item.name}`}
               </span>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center">
               <span className="text-sm font-medium">{item.percentage}</span>
             </div>
           </div>

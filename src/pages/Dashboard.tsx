@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Header from '@/components/Header';
 import KPICard from '@/components/KPICard';
@@ -93,11 +94,11 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className={`${isMobile ? 'px-4' : 'max-w-7xl mx-auto px-4 sm:px-6 md:px-8'}`}>
+    <div className={`${isMobile ? 'px-2' : 'max-w-7xl mx-auto px-4 sm:px-6 md:px-8'}`}>
       <Header title="Dashboard" subtitle="Monitoramento em tempo real" />
       
       {/* Indicadores operacionais section */}
-      <div className="mt-6">
+      <div className="mt-4 sm:mt-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-gray-900">Indicadores operacionais</h2>
         </div>
@@ -110,11 +111,11 @@ const Dashboard = () => {
           meta="Meta: 70% | Crescimento: +2.3% vs mês anterior"
           color="green"
           icon={<Activity className="h-5 w-5" />}
-          className="mb-6"
+          className="mb-4 sm:mb-6"
         />
         
         {/* Small metrics row */}
-        <div className={`grid grid-cols-1 ${isMobile ? '' : 'md:grid-cols-3'} gap-6 mb-8`}>
+        <div className={`grid grid-cols-1 ${isMobile ? 'gap-3' : 'md:grid-cols-3 gap-6'} mb-6 sm:mb-8`}>
           <MetricCard 
             title="Total de chamadas" 
             value="2.580" 
@@ -139,7 +140,7 @@ const Dashboard = () => {
         </div>
         
         {/* Charts */}
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           <LineChart 
             data={timeData} 
             title="Tempo médio de atendimento - IA" 
@@ -153,9 +154,9 @@ const Dashboard = () => {
         </div>
         
         {/* Second section - Results */}
-        <div className="mt-10 mb-6">
+        <div className="mt-6 sm:mt-10 mb-4 sm:mb-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Resultados das chamadas</h2>
-          <div className={`grid grid-cols-1 ${isMobile ? '' : 'md:grid-cols-2'} gap-6 mb-6`}>
+          <div className={`grid grid-cols-1 ${isMobile ? 'gap-4' : 'md:grid-cols-2 gap-6'} mb-4 sm:mb-6`}>
             <PieChart 
               data={resultsData} 
               title="Resultados das chamadas" 
@@ -169,30 +170,30 @@ const Dashboard = () => {
             />
           </div>
           
-          <div className={`grid grid-cols-1 ${isMobile ? '' : 'md:grid-cols-3'} gap-6`}>
+          <div className={`grid grid-cols-1 ${isMobile ? 'gap-4' : 'md:grid-cols-3 gap-6'}`}>
             <PieChart 
               data={transferReasonsData} 
               title="Taxa de transferência para atendimento humano" 
-              className={`${isMobile ? 'col-span-1' : 'col-span-1 md:col-span-1'} animate-delay-300`}
+              className="animate-delay-300"
             />
             <BarChart 
               data={transferMotivationData} 
               title="Motivo da transferência" 
               color="#6C5CE7" 
-              className={`${isMobile ? 'col-span-1' : 'col-span-1 md:col-span-1'} animate-delay-400`}
+              className="animate-delay-400"
             />
             <StatsList 
               title="Skill de transferência" 
               items={skillTransferData} 
-              className={`${isMobile ? 'col-span-1' : 'col-span-1 md:col-span-1'} animate-delay-500`}
+              className="animate-delay-500"
             />
           </div>
         </div>
         
         {/* Third section - Efficiency and Processes */}
-        <div className="mt-10 mb-10">
+        <div className="mt-6 sm:mt-10 mb-6 sm:mb-10">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Eficiência e processos</h2>
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6">
             <PieChart 
               data={callInterruptionData} 
               title="Momentos de interrupção da chamada" 

@@ -46,7 +46,7 @@ const LineChart: React.FC<LineChartProps> = ({ data, title, yAxisLabel, classNam
             margin={{ 
               top: 5, 
               right: isMobile ? 10 : 30, 
-              left: isMobile ? 0 : 20, 
+              left: isMobile ? -15 : 20, 
               bottom: 5 
             }}
           >
@@ -61,15 +61,16 @@ const LineChart: React.FC<LineChartProps> = ({ data, title, yAxisLabel, classNam
               dataKey="time" 
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: isMobile ? 10 : 12, fill: '#9CA3AF' }}
-              interval={isMobile ? 1 : 0}
+              tick={{ fontSize: isMobile ? 8 : 12, fill: '#9CA3AF' }}
+              interval={isMobile ? 2 : 0}
+              height={isMobile ? 30 : 30}
             />
             <YAxis 
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: isMobile ? 10 : 12, fill: '#9CA3AF' }}
               domain={[0, 'dataMax + 20']}
-              width={isMobile ? 30 : 40}
+              width={isMobile ? 25 : 40}
               label={yAxisLabel && !isMobile ? { 
                 value: yAxisLabel, 
                 angle: -90, 
