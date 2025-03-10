@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { PieChart as RechartsPieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { useMediaQuery } from '@/hooks/use-mobile';
@@ -21,11 +20,11 @@ const CustomLegend = ({ payload }: any) => {
   const isMobile = useMediaQuery('(max-width: 768px)');
   
   return (
-    <ul className={`flex ${isMobile ? 'flex-wrap justify-center gap-x-4' : 'flex-col'} space-y-2 ${isMobile ? 'mt-4' : 'mt-0'}`}>
+    <ul className={`flex ${isMobile ? 'flex-wrap' : 'flex-col'} gap-2 ${isMobile ? 'justify-center mt-4' : 'mt-0'}`}>
       {payload.map((entry: any, index: number) => (
-        <li key={`item-${index}`} className="flex items-center mt-1">
+        <li key={`item-${index}`} className="flex items-center">
           <span className="w-3 h-3 rounded-full inline-block mr-2" style={{ backgroundColor: entry.color }}></span>
-          <span className="text-xs text-gray-600 truncate max-w-[140px]" title={entry.value}>
+          <span className="text-xs text-gray-600 whitespace-nowrap" title={entry.value}>
             {entry.value}
           </span>
         </li>

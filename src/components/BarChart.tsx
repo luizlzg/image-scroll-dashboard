@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { useMediaQuery } from '@/hooks/use-mobile';
 
 interface DataPoint {
@@ -25,6 +24,14 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     );
   }
   return null;
+};
+
+const CustomLegend = () => {
+  return (
+    <div className="custom-legend">
+      {/* Custom legend content */}
+    </div>
+  );
 };
 
 const BarChart: React.FC<BarChartProps> = ({ 
@@ -60,11 +67,17 @@ const BarChart: React.FC<BarChartProps> = ({
               dataKey={isMobile ? "displayName" : "name"}
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: isMobile ? 8 : 12, fill: '#9CA3AF' }}
-              interval={0}
-              height={isMobile ? 60 : 30}
+              tick={{ 
+                fontSize: isMobile ? 8 : 12, 
+                fill: '#9CA3AF',
+                width: 70,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}
+              height={isMobile ? 70 : 40}
               textAnchor={isMobile ? "end" : "middle"}
               angle={isMobile ? -45 : 0}
+              minTickGap={5}
             />
             <YAxis 
               axisLine={false}
@@ -73,6 +86,19 @@ const BarChart: React.FC<BarChartProps> = ({
               width={isMobile ? 25 : 40}
             />
             <Tooltip content={<CustomTooltip />} />
+            <Legend 
+              content={<CustomLegend />} 
+              layout="horizontal"
+              verticalAlign="bottom"
+              align="center"
+              wrapperStyle={{ 
+                position: 'relative', 
+                marginTop: '10px', 
+                paddingTop: '15px',
+                width: '100%',
+                overflowX: 'auto'
+              }}
+            />
             <Bar 
               dataKey="value" 
               fill={color}
