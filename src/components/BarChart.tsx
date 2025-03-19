@@ -42,6 +42,11 @@ const BarChart: React.FC<BarChartProps> = ({
 }) => {
   const isMobile = useMediaQuery('(max-width: 768px)');
   
+  // Verifica se data está definido
+  if (!data) {
+    return <div>Loading...</div>; // Ou qualquer outro indicador de carregamento
+  }
+
   // Truncate long names for better display on mobile
   const processedData = data.map(item => ({
     ...item,
@@ -62,7 +67,7 @@ const BarChart: React.FC<BarChartProps> = ({
               bottom: isMobile ? 15 : 5 
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f5" />
             <XAxis 
               dataKey={isMobile ? "displayName" : "name"}
               axisLine={false}

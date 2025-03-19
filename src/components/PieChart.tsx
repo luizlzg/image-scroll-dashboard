@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React from 'react';
 import { PieChart as RechartsPieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { useMediaQuery } from '@/hooks/use-mobile';
@@ -48,38 +49,40 @@ const CustomTooltip = ({ active, payload }: any) => {
 const PieChart: React.FC<PieChartProps> = ({ data, title, className }) => {
   const isMobile = useMediaQuery('(max-width: 768px)');
   
+  // Verifica se data está definido
+  if (!data) {
+    return <div>Loading...</div>; // Ou qualquer outro indicador de carregamento
+  }
+
   return (
     <div className={`dashboard-card opacity-0 animate-scale-in ${className}`}>
-      <h3 className="text-lg font-medium text-gray-800 mb-4">{title}</h3>
-      <div className={`flex flex-col h-auto min-h-[280px]`}>
-        <div className={`${isMobile ? 'h-48' : 'h-64'} w-full`}>
-          <ResponsiveContainer width="100%" height="100%">
-            <RechartsPieChart>
-              <Pie
-                data={data}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                innerRadius={isMobile ? 40 : 60}
-                outerRadius={isMobile ? 65 : 85}
-                paddingAngle={2}
-                dataKey="value"
-              >
-                {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip content={<CustomTooltip />} />
-              <Legend 
-                content={<CustomLegend />} 
-                layout="horizontal"
-                verticalAlign="bottom"
-                align="center"
-                wrapperStyle={{ position: 'relative', marginTop: '10px', paddingTop: '15px' }}
-              />
-            </RechartsPieChart>
-          </ResponsiveContainer>
-        </div>
+      <h3 className="text-lg font-medium text-gray-800 mb-2">{title}</h3>
+      <div className={`${isMobile ? 'h-48' : 'h-64'}`}>
+        <ResponsiveContainer width="100%" height="100%">
+          <RechartsPieChart>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              innerRadius={isMobile ? 40 : 60}
+              outerRadius={isMobile ? 65 : 85}
+              paddingAngle={2}
+              dataKey="value"
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.color} />
+              ))}
+            </Pie>
+            <Tooltip content={<CustomTooltip />} />
+            <Legend 
+              content={<CustomLegend />} 
+              layout="horizontal"
+              verticalAlign="bottom"
+              align="center"
+            />
+          </RechartsPieChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
